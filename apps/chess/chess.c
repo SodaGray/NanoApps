@@ -136,7 +136,8 @@ static void gen_moves(int r, int c, pos_t *out, int *n_out)
             if (s_board[nr][nc] == 0 || sign_of(s_board[nr][nc]) != sgn) add_move(nr, nc);
         }
     } else if (abp == BISHOP || abp == ROOK || abp == QUEEN) {
-        static const int dirs8[8][2] = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+        /* clockwise, so even = diagonals (bishop), odd = straight lines (rook) */
+        static const int dirs8[8][2] = {{-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1}};
         int start = (abp == BISHOP) ? 0 : (abp == ROOK ? 1 : 0);
         int step  = (abp == BISHOP) ? 2 : (abp == ROOK ? 2 : 1);
         for (int i = start; i < 8; i += step) {
