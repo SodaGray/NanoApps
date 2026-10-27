@@ -282,7 +282,12 @@ typedef int (*dispatch_t)(void *self, const char *name, void *msg);
 #define TIMER_ADDR         0x09135c00u   /* OS timer object storage (survives re-exec) */
 #define TIMER_MAGIC_ADDR   0x09135c80u   /* 'TIMR' when our timer is live          */
 #define TIMER_MAGIC        0x54494d52u
-#define TIMER_PERIOD_MS    16u           /* ~60 fps redraw heartbeat                */
+/* Redraw heartbeat. The timer only Invals; the OS draws at its ~60 Hz
+ * refresh. It is one-shot and re-armed when its message is handled, so the
+ * period counts from that moment. At 16 ms (just under a 16.7 ms refresh) a
+ * little latency made the next Inval land just after a refresh, and surfaces
+ * locked at 30 Hz for seconds. Half a refresh can't miss one. */
+#define TIMER_PERIOD_MS    8u
 #define CLTIMERMSG         16u           /* timer message type (the message type field, NOT timer message) */
 #define MSG_FTYPE_OFF      4u            /* the message type field (after the vtable ptr)      */
 #define MSG_SLOT_OFF 0x40u         /* view message-handler slot (we patch it to catch messages) */
